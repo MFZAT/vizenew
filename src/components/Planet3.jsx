@@ -43,7 +43,7 @@ export const OverlayItem = ({
 };
 
 export function Planet3({ html, ...props }) {
-  const { nodes, materials } = useGLTF("/models/zatplanet4.glb");
+  const { nodes} = useGLTF("/models/zatplanet4.glb");
 
   const map = useTexture(
     "/textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"

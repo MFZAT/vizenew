@@ -14,7 +14,7 @@ export function Guy(props) {
   const { scene, animations } = useGLTF('/models/guy.glb')
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone)
-  const { actions } = useAnimations(animations, group)
+  // const { actions } = useAnimations(animations, group)
 
   const material = new THREE.MeshStandardMaterial();
   material.color.set(0x00ee44);
