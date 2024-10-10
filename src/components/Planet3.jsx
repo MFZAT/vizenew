@@ -4,10 +4,11 @@ Command: npx gltfjsx@6.5.2 public/models/zatplanet4.glb -o src/components/Planet
 */
 
 import React from "react";
-import { Html, useGLTF } from "@react-three/drei";
+import { Html, Outlines, useGLTF, useTexture } from "@react-three/drei";
 import { useAtom } from "jotai";
 import { currentPageAtom } from "./ui";
 import { degToRad } from "three/src/math/MathUtils.js";
+import * as THREE from "three";
 
 export const OverlayItem = ({
   className = "",
@@ -43,6 +44,30 @@ export const OverlayItem = ({
 
 export function Planet3({ html, ...props }) {
   const { nodes, materials } = useGLTF("/models/zatplanet4.glb");
+
+  const map = useTexture(
+    "/textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
+  );
+  // const displacementMap = useTexture(
+  //   "/textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
+  // );
+  const normalMap = useTexture(
+    "/textures/Poliigon_GrassPatchyGround_4585_Normal.png"
+  );
+  const rougnessMap = useTexture(
+    "/textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
+  );
+
+  const material = new THREE.MeshStandardMaterial();
+  material.map = map;
+  material.normalMap = normalMap;
+  // material.displacementMap = displacementMap;
+  material.displacementScale = 0.1;
+  material.roughnessMap = rougnessMap;
+  // material.wireframe = true;
+  material.color.set(0x00ee44);
+  // material.blendColor = "multiply";
+
   return (
     <group {...props} dispose={null}>
       <group name="Scene">
@@ -51,16 +76,17 @@ export function Planet3({ html, ...props }) {
         <mesh
           name="Sphere"
           geometry={nodes.Sphere.geometry}
-          material={materials.Poliigon_GrassPatchyGround_4585_4K}
+          material={material}
           scale={[4.002, 4.018, 4.003]}
-        />
+          // material-color={"green"}
+          >  <Outlines thickness={2} color="black"  /></mesh>
         <group>
           <mesh
             name="Sphere003"
             geometry={nodes.Sphere003.geometry}
-            material={materials.Poliigon_GrassPatchyGround_4585_4K}
+            material={material}
             scale={[4.002, 4.018, 4.003]}
-          />
+            >  <Outlines thickness={1} color="black"  /></mesh>
           {html && (
             <group
               position-x={0.1}
@@ -81,9 +107,9 @@ export function Planet3({ html, ...props }) {
           <mesh
             name="Sphere004"
             geometry={nodes.Sphere004.geometry}
-            material={materials.Poliigon_GrassPatchyGround_4585_4K}
+            material={material}
             scale={[4.002, 4.018, 4.003]}
-          />
+            >  <Outlines thickness={1} color="black"  /></mesh>
           {html && (
             <group
               position-x={0.1}
@@ -103,17 +129,17 @@ export function Planet3({ html, ...props }) {
         <mesh
           name="Sphere005"
           geometry={nodes.Sphere005.geometry}
-          material={materials.Poliigon_GrassPatchyGround_4585_4K}
+          material={material}
           scale={[4.002, 4.018, 4.003]}
-        />
+          >  <Outlines thickness={1} color="black"  /></mesh>
 
         <mesh
           name="Sphere002"
           geometry={nodes.Sphere002.geometry}
-          material={materials.Poliigon_GrassPatchyGround_4585_4K}
+          material={material}
           scale={[4.002, 4.018, 4.003]}
           position={[-6.985, 4.56, -4.674]}
-        />
+          >  <Outlines thickness={1} color="black"  /></mesh>
       </group>
     </group>
   );
