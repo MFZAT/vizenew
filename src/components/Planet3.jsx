@@ -51,16 +51,16 @@ export function Planet3({ html, ...props }) {
   // const displacementMap = useTexture(
   //   "/textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
   // );
-  const normalMap = useTexture(
-    "/textures/Poliigon_GrassPatchyGround_4585_Normal.png"
-  );
+  // const normalMap = useTexture(
+  //   "/textures/Poliigon_GrassPatchyGround_4585_Normal.png"
+  // );
   const rougnessMap = useTexture(
     "/textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
   );
 
   const material = new THREE.MeshStandardMaterial();
   material.map = map;
-  material.normalMap = normalMap;
+  // material.normalMap = normalMap;
   // material.displacementMap = displacementMap;
   material.displacementScale = 0.1;
   material.roughnessMap = rougnessMap;

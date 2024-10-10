@@ -8,13 +8,13 @@ import {
   Environment,
   Float,
   OrbitControls,
-  Outlines,
+
   Stars,
-  Stats,
+
   Text,
-  TrackballControls,
+
 } from "@react-three/drei";
-import { Planet1 } from "../components/Planet1";
+
 import { Planet3 } from "../components/Planet3";
 
 import { degToRad } from "three/src/math/MathUtils.js";
@@ -69,9 +69,9 @@ const wordData = [
 ];
 
 function Word({ children, ...props }) {
-  const color = new THREE.Color();
-  const { name, stroke } = useControls({
-    // name: wordData[0],
+
+  const { stroke } = useControls({
+ 
     stroke: "#fff",
   });
   const fillOpacity = useControls("Text fill", {
