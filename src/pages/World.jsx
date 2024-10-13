@@ -3,16 +3,19 @@ import { useRef, useState, useMemo, useEffect, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   Billboard,
+  Box,
   Cloud,
   Clouds,
+  ContactShadows,
   Environment,
   Float,
+  Html,
+  MeshWobbleMaterial,
   OrbitControls,
-
+  Plane,
+  PresentationControls,
   Stars,
-
   Text,
-
 } from "@react-three/drei";
 
 import { Planet3 } from "../components/Planet3";
@@ -20,6 +23,10 @@ import { Planet3 } from "../components/Planet3";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { useControls } from "leva";
 import { Guy } from "../components/Guy";
+import { Guy1 } from "../components/Guy1";
+import { GuyRound } from "../components/GuyRound";
+import { GuySit } from "../components/GuySit";
+import world from "./world.scss";
 
 const wordData = [
   "Vysokorychlostní tratě (VRT)",
@@ -68,22 +75,35 @@ const wordData = [
   "Sebevědomí",
 ];
 
-function Word({ children, ...props }) {
+function LoadingView() {
+  return (
+    <Html transform distanceFactor={20} center>
+      <div class="background">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </Html>
+  );
+}
 
-  const { stroke } = useControls({
- 
-    stroke: "#fff",
-  });
-  const fillOpacity = useControls("Text fill", {
-    opacity: 0.5,
-    fill: "white",
-  });
+function Word({ children, ...props }) {
+  // const { stroke } = useControls({
+  //   stroke: "#fff",
+  // });
+  // const fillOpacity = useControls("Text fill", {
+  //   opacity: 0.5,
+  //   fill: "white",
+  // });
 
   const fontProps = {
     font: "/fonts/Exo2-Medium.ttf",
     // fontSize: Math.random() * 5,
     fontSize: 2,
-    letterSpacing: -0.05,
+    letterSpacing: 0,
     lineHeight: 1,
     // fillOpacity: 0,
     strokeWidth: "2.5%",
@@ -135,10 +155,9 @@ function Word({ children, ...props }) {
         onClick={() => console.log("clicked")}
         {...fontProps}
         children={children}
-    
-        strokeColor={stroke}
-        fillOpacity={fillOpacity.opacity}
-        color={fillOpacity.fill}
+        strokeColor={"#fff"}
+        fillOpacity={0.5}
+        color={"#fff"}
         // opacity={opacity}
       >
         {children}
@@ -168,8 +187,8 @@ function TextCloud({ count = 8, radius = 20 }) {
   console.log(words, words.length);
 
   return words.map(([pos, word], index) => (
-    <Float>
-      <Word key={index} position={pos} children={word}>
+    <Float rotationIntensity={2} floatIntensity={2}>
+      <Word key={word} position={pos} children={word}>
         {wordData[index]}
       </Word>
     </Float>
@@ -177,11 +196,34 @@ function TextCloud({ count = 8, radius = 20 }) {
 }
 
 export default function World() {
+  const [hoveredGuy, setHoveredGuy] = useState(false);
+  const guyHover = (e) => {
+    e.stopPropagation();
+    setHoveredGuy(true);
+    console.log("Guy");
+  };
+  const guyOut = () => setHoveredGuy(false);
+  // const directionalCtl = useControls("Directional Light", {
+  //   visible: true,
+  //   position: {
+  //     x: 3.3,
+  //     y: 1.0,
+  //     z: 4.4,
+  //   },
+  //   castShadow: true,
+  // });
   return (
-    <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
+    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
+      <directionalLight position={[3.3, 1.0, 4.4]} castShadow />
+      <directionalLight
+        intensity={0.5}
+        castShadow // highlight-line
+        shadow-mapSize-height={1000}
+        shadow-mapSize-width={1000}
+      />
       <color attach="background" args={["#333"]} />
       {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
-      <Suspense fallback={"uuu"}>
+      <Suspense fallback={<LoadingView />}>
         <group>
           <TextCloud count={5} radius={20} />
         </group>
@@ -205,18 +247,60 @@ export default function World() {
             />
           </Clouds>
         </Float>
-    
-        <Float floatIntensity={2} rotationIntensity={0}>
-          {/* <Billboard> */}
+
+        <Billboard>
+          {/* <PresentationControls
+ global
+        config={{ mass: 2, tension: 500, friction:26 }}
+        snap={{ mass: 2, tension: 1000 }}
+        rotation={[0, 0, 0]}
+        // polar={[-Math.PI / 3, Math.PI / 3]}
+        // azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+        speed={1} // Speed factor
+        zoom={1} // Zoom factor when half the polar-max is reached
+        > */}
+
           <Planet3 rotation-y={degToRad(0)} scale={2.5} />
-    <Guy position={[-6,2.6,6]} rotation-y={degToRad(30)}/>
-    <Guy position={[4,-6,6]} rotation-y={degToRad(15)}/>
-    <Guy position={[3,9,3]} rotation-y={degToRad(0)}/>
-          {/* <Planet3 rotation-y={degToRad(0)} scale={2.5} /> */}
-          {/* </Billboard> */}
-        </Float>
-      
-        <Environment preset="forest" />
+          {/* <Box castShadow position={[-6,4,6]} rotation-y={degToRad(30)}>
+            <MeshWobbleMaterial color="red"/>
+          </Box> */}
+          <Guy
+            position={[3, 9, 3]}
+            rotation-y={degToRad(-10)}
+            rotation-x={degToRad(30)}
+            castShadow
+            onPointerOver={guyHover}
+            onPointerOut={guyOut}
+            hoveredThis={hoveredGuy}
+          />
+          {/* <Guy1 position={[4,-6,5.5]} rotation-y={degToRad(15)} castShadow/> */}
+          <GuyRound
+            position={[-6, 2.65, 6]}
+            rotation-y={degToRad(30)}
+            castShadow
+          />
+
+          <GuySit
+            position={[2, -6, 7.2]}
+            rotation-y={degToRad(15)}
+            castShadow
+            sit
+            onPointerOver={guyHover}
+            onPointerOut={guyOut}
+            hoveredThis={hoveredGuy}
+          />
+          <Guy
+            position={[1, 2.9, 9]}
+            rotation-y={degToRad(-40)}
+            castShadow
+            sit
+          />
+          <Planet3 rotation-y={degToRad(0)} scale={2.5} />
+
+          {/* </PresentationControls> */}
+        </Billboard>
+
+        <Environment preset="apartment" />
         <Stars
           radius={50}
           depth={50}
@@ -230,7 +314,14 @@ export default function World() {
       {/* <axesHelper args={[50]} />
       <gridHelper /> */}
       {/* <TrackballControls /> */}
-      <OrbitControls />
+      <ContactShadows
+        position={[0, -0.8, 0]}
+        opacity={0.25}
+        scale={10}
+        blur={1.5}
+        far={0.8}
+      />
+      <OrbitControls minDistance={20} maxDistance={70} />
       {/* <Stats /> */}
     </Canvas>
   );

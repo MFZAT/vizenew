@@ -43,11 +43,11 @@ export const OverlayItem = ({
 };
 
 export function Planet3({ html, ...props }) {
-  const { nodes} = useGLTF("/models/zatplanet4.glb");
+  const { nodes } = useGLTF("/models/zatplanet4.glb");
 
-  const map = useTexture(
-    "/textures/Poliigon_GrassPatchyGround_4585_BaseColor.jpg"
-  );
+  nodes.Sphere.geometry.computeVertexNormals();
+
+  const map = useTexture("/textures/zat.png");
   // const displacementMap = useTexture(
   //   "/textures/Poliigon_GrassPatchyGround_4585_Displacement.tiff"
   // );
@@ -58,15 +58,15 @@ export function Planet3({ html, ...props }) {
     "/textures/Poliigon_GrassPatchyGround_4585_Roughness.jpg"
   );
 
-  const material = new THREE.MeshStandardMaterial();
+  const material = new THREE.MeshToonMaterial();
   material.map = map;
   // material.normalMap = normalMap;
   // material.displacementMap = displacementMap;
   material.displacementScale = 0.1;
   material.roughnessMap = rougnessMap;
   // material.wireframe = true;
-  material.color.set(0x00ee44);
-  // material.blendColor = "multiply";
+  material.color.set("#BED600");
+  material.blendColor = "multiply";
 
   return (
     <group {...props} dispose={null}>
@@ -79,14 +79,20 @@ export function Planet3({ html, ...props }) {
           material={material}
           scale={[4.002, 4.018, 4.003]}
           // material-color={"green"}
-          >  <Outlines thickness={2} color="black"  /></mesh>
+          receiveShadow
+        >
+          <Outlines thickness={2} color="black" />
+        </mesh>
         <group>
           <mesh
             name="Sphere003"
             geometry={nodes.Sphere003.geometry}
             material={material}
             scale={[4.002, 4.018, 4.003]}
-            >  <Outlines thickness={1} color="black"  /></mesh>
+            receiveShadow
+          >
+            {/* <Outlines thickness={1} color="black"  /> */}
+          </mesh>
           {html && (
             <group
               position-x={0.1}
@@ -109,7 +115,10 @@ export function Planet3({ html, ...props }) {
             geometry={nodes.Sphere004.geometry}
             material={material}
             scale={[4.002, 4.018, 4.003]}
-            >  <Outlines thickness={1} color="black"  /></mesh>
+            receiveShadow
+          >
+            <Outlines thickness={1} color="black" />
+          </mesh>
           {html && (
             <group
               position-x={0.1}
@@ -131,7 +140,10 @@ export function Planet3({ html, ...props }) {
           geometry={nodes.Sphere005.geometry}
           material={material}
           scale={[4.002, 4.018, 4.003]}
-          >  <Outlines thickness={1} color="black"  /></mesh>
+          receiveShadow
+        >
+          {/* <Outlines thickness={1} color="black"  /> */}
+        </mesh>
 
         <mesh
           name="Sphere002"
@@ -139,7 +151,10 @@ export function Planet3({ html, ...props }) {
           material={material}
           scale={[4.002, 4.018, 4.003]}
           position={[-6.985, 4.56, -4.674]}
-          >  <Outlines thickness={1} color="black"  /></mesh>
+          receiveShadow
+        >
+          {/* <Outlines thickness={1} color="black"  /> */}
+        </mesh>
       </group>
     </group>
   );
