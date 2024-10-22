@@ -1,0 +1,118 @@
+$animationDuration: 3s;
+$amount: 6;
+$particleRadius: 4vmin;
+
+.background {
+  width: 100vw;
+  height: 100vh;
+
+  --amount: 20;
+}
+
+.background span {
+  width: $particleRadius * 2;
+  height: $particleRadius * 2;
+  border-radius: $particleRadius;
+  border: 1px solid #010101;
+  backface-visibility: hidden;
+  position: absolute;
+  animation-name: move;
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+  animation-iteration-count: infinite;
+  animation-duration: $animationDuration;
+  top: calc(50% - #{$particleRadius});
+  left: 50%;
+  transform-origin: ($particleRadius * -1) center;
+
+  $colorsDot: (#007934, #3f9c35, #bed600);
+
+  @for $i from 1 through $amount {
+    &:nth-child(#{$i}) {
+      background: nth($colorsDot, random(length($colorsDot)));
+      animation-delay: ($i / $amount) * $animationDuration * -1;
+      opacity: 0;
+    }
+  }
+}
+
+.text {
+  font-family: "Indie Flower", cursive;
+  color: transparent;
+  --bg-size: 400%;
+  background: linear-gradient(30deg, #007934, #3f9c35, #bed600) 0 0 / 100% 100%;
+  background-position: top left;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: move-bg 3s infinite linear;
+  font-size: 5rem;
+  margin-left: auto;
+  width: fit-content;
+  position: relative;
+
+  div {
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+    border: 1px solid #010101;
+    backface-visibility: hidden;
+    margin: 0 0.5rem;
+    animation-name: move;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+    animation-iteration-count: infinite;
+    animation-duration: $animationDuration;
+
+    $colors: (#007934, #007934, #3f9c35, #bed600);
+
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        background: nth($colors, $i);
+        animation-delay: ($i / 4) * $animationDuration * -1;
+      }
+    }
+  }
+}
+
+.letter-u {
+  position: relative;
+  color: #3f9c35;
+}
+
+.dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #010101;
+  position: absolute;
+  top: 0;
+  left: 0.5rem;
+  background: #3f9c35;
+  animation-name: move;
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+  animation-iteration-count: infinite;
+  animation-delay: 1;
+  animation-duration: 2s;
+  border: 1px solid #010101;
+  backface-visibility: hidden;
+  position: absolute;
+  animation-name: move;
+}
+
+@keyframes move {
+  0% {
+    transform: scale(1) rotate(0deg) translate3d(0, 2px, 1px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    z-index: 10;
+    transform: scale(0) rotate(360deg) translate3d(0, 0, 1px);
+  }
+}
+
+@keyframes move-bg {
+  to {
+    background-position: top right;
+  }
+}

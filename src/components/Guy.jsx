@@ -27,12 +27,7 @@ export function Guy({ hoveredThis, sit, ...props }) {
   useEffect(() => {
     if (sit) {
       actions[names[0]].fadeIn(0.5).play().reset();
-    }
-
-    if (hoveredThis) {
-      actions.waving.repetitions = 1;
-      actions.waving.fadeIn(0.5).play().reset();
-    }
+    } else actions.waving.fadeIn(0.5).play().reset();
   }, [hoveredThis]);
 
   const bodyMaterial = new THREE.MeshToonMaterial();
