@@ -3,32 +3,15 @@ import { useRef, useState, useMemo, useEffect, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   Billboard,
-  Box,
   Cloud,
   Clouds,
-  ContactShadows,
   Environment,
   Float,
-  Html,
-  MeshWobbleMaterial,
   OrbitControls,
-  Plane,
-  PresentationControls,
-  RandomizedLight,
-  Shadow,
   Stars,
   Text,
 } from "@react-three/drei";
-
-import { Planet3 } from "../components/Planet3";
-
 import { degToRad } from "three/src/math/MathUtils.js";
-import { useControls } from "leva";
-import { Guy } from "../components/Guy";
-import { Guy1 } from "../components/Guy1";
-import { GuyRound } from "../components/GuyRound";
-import { GuySit } from "../components/GuySit";
-
 import LoadingView from "../components/LoadingView";
 import FormPage from "../components/FormPage";
 import style from "../components/style.scss";
@@ -163,11 +146,9 @@ function TextCloud({ count = 8, radius = 20, texts }) {
   console.log(words, words.length, texts);
 
   return words.map(([pos, word], index) => (
-    <Float rotationIntensity={5} floatIntensity={2}>
-      <Word key={word} position={pos} children={word}>
-        {texts.length > 1 ? texts[index] : wordData[index]}
-      </Word>
-    </Float>
+    <Word key={word} position={pos} children={word}>
+      {texts.length > 1 ? texts[index] : wordData[index]}
+    </Word>
   ));
 }
 
@@ -230,17 +211,19 @@ export default function World() {
         </svg>
       </button>
       <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
-        {/* <directionalLight position={[-10, 10, 4.4]} /> */}
+        <directionalLight position={[0, 50, -20]} intensity={5} />
         {/* <directionalLight intensity={5} /> */}
 
-        <RandomizedLight amount={8} frames={100} position={[0, 0, 0]} />
+        {/* <RandomizedLight amount={8} frames={100} position={[0, 0, 0]} /> */}
         <ambientLight intensity={10} />
         <color attach="background" args={["#333"]} />
         {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
         <Suspense fallback={<LoadingView />}>
-          <group>
-            <TextCloud count={5} radius={20} texts={texts} />
-          </group>
+          <Float rotationIntensity={5} floatIntensity={2}>
+            <group>
+              <TextCloud count={5} radius={20} texts={texts} />
+            </group>
+          </Float>
           <Float>
             <Clouds material={THREE.MeshBasicMaterial}>
               <Cloud
