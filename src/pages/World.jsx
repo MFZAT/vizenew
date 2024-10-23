@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useRef, useState, useMemo, useEffect, Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Billboard,
   Cloud,
@@ -8,6 +8,7 @@ import {
   Environment,
   Float,
   OrbitControls,
+  RandomizedLight,
   Stars,
   Text,
 } from "@react-three/drei";
@@ -18,6 +19,8 @@ import style from "../components/style.scss";
 import { AnimatePresence } from "framer-motion";
 import { Model2 } from "../components/PlanetModel2";
 import { WithTie } from "../components/Tie";
+import { Planetzat } from "../components/Planetzat";
+import { PlanetLeaves } from "../components/Planetzat2";
 
 const wordData = [
   "Vysokorychlostní tratě (VRT)",
@@ -59,16 +62,17 @@ function Word({ children, ...props }) {
   // });
 
   const fontProps = {
-    font: "/fonts/Exo2-Medium.ttf",
+    font: "/fonts/IndieFlower-Regular.ttf",
     // fontSize: Math.random() * 5,
     fontSize: 2,
     letterSpacing: 0,
     lineHeight: 1,
     // fillOpacity: 0,
-    strokeWidth: "2.5%",
+    strokeWidth: "3%",
     strokeColor: "#ffffff",
-    maxWidth: 15,
+    maxWidth: 14,
     overflowWrap: "break-word",
+    textAlign: "center",
     "material-toneMapped": true,
   };
   const ref = useRef();
@@ -152,6 +156,26 @@ function TextCloud({ count = 8, radius = 20, texts }) {
   ));
 }
 
+function FollowCameraLight() {
+  const lightRef = useRef();
+  const { camera } = useThree();
+
+  useFrame(() => {
+    lightRef.current.position.copy(camera.position);
+  });
+
+  return (
+    <>
+      {/* <directionalLight ref={lightRef} position={[0, 10, -20]} intensity={5} /> */}
+      {/* <directionalLight intensity={5} /> */}
+
+      {/* <RandomizedLight amount={8} frames={100} position={[0, 0, 0]} /> */}
+      <ambientLight intensity={5} ref={lightRef} />
+      {/* <directionalLight ref={lightRef} intensity={10} /> */}
+    </>
+  );
+}
+
 export default function World() {
   const [hoveredGuy, setHoveredGuy] = useState(false);
   const [texts, setTexts] = useState("");
@@ -210,21 +234,29 @@ export default function World() {
           />
         </svg>
       </button>
-      <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
-        <directionalLight position={[0, 50, -20]} intensity={5} />
-        {/* <directionalLight intensity={5} /> */}
-
-        {/* <RandomizedLight amount={8} frames={100} position={[0, 0, 0]} /> */}
-        <ambientLight intensity={10} />
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
         <color attach="background" args={["#333"]} />
+
+        {/* LIGHTS */}
+        <ambientLight intensity={3} />
+        <RandomizedLight
+          amount={8}
+          frames={100}
+          position={[0, 0, 0]}
+          castShadow
+        />
+        {/* <FollowCameraLight /> */}
+
         {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
         <Suspense fallback={<LoadingView />}>
+          {/* TEXTS */}
           <Float rotationIntensity={5} floatIntensity={2}>
             <group>
               <TextCloud count={5} radius={20} texts={texts} />
             </group>
           </Float>
           <Float>
+            {/* SPACE */}
             <Clouds material={THREE.MeshBasicMaterial}>
               <Cloud
                 bounds={[15, 15, 15]}
@@ -245,7 +277,36 @@ export default function World() {
             </Clouds>
           </Float>
 
+          {/* PLANET */}
           <Billboard>
+            <Planetzat rotation-y={degToRad(5)} scale={2.5} />
+
+            {/* CHARACTERS */}
+            <WithTie
+              position={[1, 9.5, 3]}
+              rotation-y={degToRad(-10)}
+              rotation-x={degToRad(30)}
+              rotation-z={degToRad(-5)}
+              castShadow
+              look
+              withoutTie
+            />
+
+            {/* <Guy1 position={[4,-6,5.5]} rotation-y={degToRad(15)} castShadow/> */}
+            <WithTie
+              position={[-3, 9, 3]}
+              rotation-z={degToRad(6)}
+              castShadow
+              wave
+            />
+
+            <WithTie
+              position={[-6, 2.45, 6]}
+              rotation-z={degToRad(6)}
+              castShadow
+              idle
+            />
+
             {/* <PresentationControls
  global
         config={{ mass: 2, tension: 500, friction:26 }}
@@ -267,29 +328,6 @@ export default function World() {
               onPointerOut={guyOut}
               hoveredThis={hoveredGuy}
             /> */}
-            <WithTie
-              position={[1, 9.5, 3]}
-              rotation-y={degToRad(-10)}
-              rotation-x={degToRad(30)}
-              rotation-z={degToRad(-5)}
-              castShadow
-              look
-            />
-
-            {/* <Guy1 position={[4,-6,5.5]} rotation-y={degToRad(15)} castShadow/> */}
-            <WithTie
-              position={[-3, 9, 3]}
-              rotation-z={degToRad(6)}
-              castShadow
-              wave
-            />
-
-            <WithTie
-              position={[-6, 2.45, 6]}
-              rotation-z={degToRad(6)}
-              castShadow
-              idle
-            />
 
             {/* <GuySit
               position={[2, -5.8, 7.5]}
@@ -311,19 +349,18 @@ export default function World() {
               rotation-y={degToRad(30)}
               castShadow
               sit
+              withoutTie
             />
-
-            <Model2 rotation-y={degToRad(5)} scale={2.5} />
 
             {/* </PresentationControls> */}
           </Billboard>
 
-          <Environment preset="park" />
+          {/* <Environment preset="park" /> */}
           <Stars
             radius={50}
             depth={50}
-            count={100}
-            factor={4}
+            count={200}
+            factor={Math.floor(Math.random() * 10)}
             saturation={0.5}
             fade
             speed={3}

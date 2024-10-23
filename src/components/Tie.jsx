@@ -8,12 +8,14 @@ import { useGraph } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
-export function WithTie({ idle, sit, wave, look, ...props }) {
+export function WithTie({ idle, sit, wave, look, withoutTie, ...props }) {
   const group = React.useRef();
   const { scene, animations } = useGLTF("/models/guyfaceanim.glb");
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone);
   const { actions, names } = useAnimations(animations, group);
+  console.log(materials);
+  materials["Material.001"].color.set("#bad89a");
 
   useEffect(() => {
     if (sit) {
@@ -68,24 +70,28 @@ export function WithTie({ idle, sit, wave, look, ...props }) {
             material={materials["SVGMat.002"]}
             skeleton={nodes.path14.skeleton}
           />
-          <skinnedMesh
-            name="path15"
-            geometry={nodes.path15.geometry}
-            material={materials["SVGMat.003"]}
-            skeleton={nodes.path15.skeleton}
-          />
-          <skinnedMesh
-            name="path16"
-            geometry={nodes.path16.geometry}
-            material={materials["SVGMat.004"]}
-            skeleton={nodes.path16.skeleton}
-          />
-          <skinnedMesh
-            name="path17"
-            geometry={nodes.path17.geometry}
-            material={materials["SVGMat.005"]}
-            skeleton={nodes.path17.skeleton}
-          />
+          {!withoutTie && (
+            <>
+              <skinnedMesh
+                name="path15"
+                geometry={nodes.path15.geometry}
+                material={materials["SVGMat.003"]}
+                skeleton={nodes.path15.skeleton}
+              />
+              <skinnedMesh
+                name="path16"
+                geometry={nodes.path16.geometry}
+                material={materials["SVGMat.004"]}
+                skeleton={nodes.path16.skeleton}
+              />
+              <skinnedMesh
+                name="path17"
+                geometry={nodes.path17.geometry}
+                material={materials["SVGMat.005"]}
+                skeleton={nodes.path17.skeleton}
+              />
+            </>
+          )}
           <skinnedMesh
             name="path5"
             geometry={nodes.path5.geometry}
