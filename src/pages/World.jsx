@@ -34,6 +34,7 @@ import FormPage from "../components/FormPage";
 import style from "../components/style.scss";
 import { AnimatePresence } from "framer-motion";
 import { Model2 } from "../components/PlanetModel2";
+import { WithTie } from "../components/Tie";
 
 const wordData = [
   "Vysokorychlostní tratě (VRT)",
@@ -273,7 +274,7 @@ export default function World() {
         zoom={1} // Zoom factor when half the polar-max is reached
         > */}
 
-            <Guy
+            {/* <Guy
               position={[1, 9.5, 3]}
               rotation-y={degToRad(-10)}
               rotation-x={degToRad(30)}
@@ -282,16 +283,32 @@ export default function World() {
               onPointerOver={guyHover}
               onPointerOut={guyOut}
               hoveredThis={hoveredGuy}
+            /> */}
+            <WithTie
+              position={[1, 9.5, 3]}
+              rotation-y={degToRad(-10)}
+              rotation-x={degToRad(30)}
+              rotation-z={degToRad(-5)}
+              castShadow
+              look
             />
 
             {/* <Guy1 position={[4,-6,5.5]} rotation-y={degToRad(15)} castShadow/> */}
-            <GuyRound
+            <WithTie
+              position={[-3, 9, 3]}
+              rotation-z={degToRad(6)}
+              castShadow
+              wave
+            />
+
+            <WithTie
               position={[-6, 2.45, 6]}
               rotation-z={degToRad(6)}
               castShadow
+              idle
             />
 
-            <GuySit
+            {/* <GuySit
               position={[2, -5.8, 7.5]}
               rotation-y={degToRad(15)}
               castShadow
@@ -299,10 +316,16 @@ export default function World() {
               onPointerOver={guyHover}
               onPointerOut={guyOut}
               hoveredThis={hoveredGuy}
+            /> */}
+            <WithTie
+              position={[2, -5.8, 7.5]}
+              rotation-y={degToRad(30)}
+              castShadow
+              sit
             />
-            <Guy
+            <WithTie
               position={[1, 2.9, 9.2]}
-              rotation-y={degToRad(-40)}
+              rotation-y={degToRad(30)}
               castShadow
               sit
             />
