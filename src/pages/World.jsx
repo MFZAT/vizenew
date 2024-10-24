@@ -20,7 +20,6 @@ import { AnimatePresence } from "framer-motion";
 import { Model2 } from "../components/PlanetModel2";
 import { WithTie } from "../components/Tie";
 import { Planetzat } from "../components/Planetzat";
-import { PlanetLeaves } from "../components/Planetzat2";
 
 const wordData = [
   "Vysokorychlostní tratě (VRT)",
