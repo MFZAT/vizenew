@@ -23,7 +23,6 @@ import { WithTie } from "../components/Tie";
 import { Planetzat } from "../components/Planetzat";
 import { button, useControls } from "leva";
 import { ModelSmoothPlanet } from "../components/PlanetModelsmooth";
-import { ModelSmooth } from "../components/PlanetModelsmoot1h";
 
 import { Allpose } from "../components/Allpose";
 
@@ -296,9 +295,8 @@ export default function World({ texts }) {
         </Float>
         {/* PLANET */}
         <Billboard>
-          {/* <Planetzat rotation-y={degToRad(5)} scale={2.5} /> */}
           <ModelSmoothPlanet rotation-z={degToRad(0)} scale={2.5} />
-          {/* <ModelSmooth rotation-y={degToRad(0)} scale={2.5} /> */}
+
           {/* CHARACTERS */}
           {/* <WithTie
             position={[1, 9.5, 3]}
