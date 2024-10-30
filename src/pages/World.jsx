@@ -3,6 +3,7 @@ import { useRef, useState, useMemo, useEffect, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Billboard,
+  CameraControls,
   Cloud,
   Clouds,
   Environment,
@@ -20,6 +21,11 @@ import { AnimatePresence } from "framer-motion";
 import { Model2 } from "../components/PlanetModel2";
 import { WithTie } from "../components/Tie";
 import { Planetzat } from "../components/Planetzat";
+import { button, useControls } from "leva";
+import { ModelSmoothPlanet } from "../components/PlanetModelsmooth";
+import { ModelSmooth } from "../components/PlanetModelsmoot1h";
+
+import { Allpose } from "../components/Allpose";
 
 const wordData = [
   "Vysokorychlostní tratě (VRT)",
@@ -149,9 +155,11 @@ function TextCloud({ count = 8, radius = 20, texts }) {
   console.log(words, words.length, texts);
 
   return words.map(([pos, word], index) => (
-    <Word key={word} position={pos} children={word}>
-      {texts.length > 1 ? texts[index] : wordData[index]}
-    </Word>
+    <Float rotationIntensity={0} floatIntensity={3} floatingRange={[-0.3, 0.3]}>
+      <Word key={word} position={pos} children={word}>
+        {texts.length > 1 ? texts[index] : wordData[index]}
+      </Word>
+    </Float>
   ));
 }
 
@@ -169,16 +177,39 @@ function FollowCameraLight() {
       {/* <directionalLight intensity={5} /> */}
 
       {/* <RandomizedLight amount={8} frames={100} position={[0, 0, 0]} /> */}
-      <ambientLight intensity={5} ref={lightRef} />
-      {/* <directionalLight ref={lightRef} intensity={10} /> */}
+      <ambientLight intensity={3} ref={lightRef} />
+      <directionalLight ref={lightRef} intensity={3} />
     </>
   );
 }
 
-export default function World() {
+export default function World({ texts }) {
+  const controls = useRef();
+  const textcloud = useRef();
   const [hoveredGuy, setHoveredGuy] = useState(false);
-  const [texts, setTexts] = useState("");
-  const [openForm, setOpenForm] = useState(false);
+
+  // useEffect(() => {
+  //   // console.log("texts", texts);
+  //   console.log("controls", controls);
+  // });
+
+  useFrame(() => {
+    // controls.current.smoothTime = 0.0001;
+    // controls.current.rotate(-0.01, 0, true);
+    // textcloud.current.rotation.y += 0.01;
+  });
+
+  // useControls("Dolly", {
+  //   in: button(() => controls.current.dolly(3, true)),
+  //   out: button(() => controls.current.dolly(-3, true)),
+  // });
+
+  // useControls("truck", {
+  //   up: button(() => controls.current.truck(0, -0.5, true)),
+  //   down: button(() => controls.current.truck(0, 0.5, true)),
+  //   left: button(() => controls.current.truck(-0.5, 0, true)),
+  // });
+
   const guyHover = (e) => {
     e.stopPropagation();
     setHoveredGuy(true);
@@ -195,189 +226,162 @@ export default function World() {
   //   castShadow: true,
   // });
 
-  const handleFormData = (childdata) => {
-    setTexts(childdata);
-    console.log(texts);
-    return texts;
-  };
-
-  const handleOpenForm = () => {
-    setOpenForm(!openForm);
-    console.log("open form", openForm);
-  };
-
   return (
     <>
-      <AnimatePresence>
-        {openForm && <FormPage formData={handleFormData} />}
-      </AnimatePresence>
-
-      <button
-        className="bg-transparent h-8 w-8 absolute left-0 z-20 rounded-full flex justify-center items-center text-white"
-        onClick={handleOpenForm}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className={`size-6   ${
-            !openForm && "-rotate-180"
-          } transition-transform`}
+      {/* CAMERA     */}
+      {/* <CameraControls ref={controls} minDistance={20} maxDistance={70} /> */}
+      <OrbitControls
+        // minPolarAngle={Math.PI / 4}
+        // maxPolarAngle={Math.PI / 2}
+        // minAzimuthAngle={-Math.PI / 4}
+        // maxAzimuthAngle={Math.PI / 4}
+        autoRotate
+        autoRotateSpeed={0.5}
+        ref={controls}
+        minDistance={20}
+        maxDistance={70}
+        // enableDamping={false}
+      />
+      {/* 
+        <mesh
+          ref={meshFitCameraHome}
+          position-z={1.5}
+          position-x={1}
+          visible={false}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m4.5 15.75 7.5-7.5 7.5 7.5"
+          <boxGeometry args={[10, 10, 10]} />
+          <meshBasicMaterial color="orange" />
+        </mesh> */}
+      {/* LIGHTS */}
+      {/* <ambientLight intensity={3} color={new THREE.Color("white")} /> 
+      <RandomizedLight
+        amount={8}
+        frames={100}
+        position={[0, 0, 0]}
+        castShadow
+      /> */}
+      <FollowCameraLight />
+      {/* <hemisphereLight
+        skycolor={new THREE.Color("lime")}
+        groundColor={new THREE.Color("#efefef")}
+        intensity={2}
+        position={[0, 100, 100]}
+      /> */}
+      {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
+      <Suspense fallback={<LoadingView />}>
+        {/* TEXTS */}
+        <Float rotationIntensity={2} floatIntensity={0}>
+          <TextCloud count={5} radius={20} texts={texts} ref={textcloud} />
+        </Float>
+        <Float rotationIntensity={2} floatIntensity={5} floatingRange={[1, -1]}>
+          {/* SPACE */}
+          <Clouds material={THREE.MeshBasicMaterial}>
+            <Cloud
+              bounds={[15, 15, 15]}
+              seed={20}
+              scale={1}
+              volume={10}
+              color="white"
+              fade={500}
+            />
+            <Cloud
+              bounds={[10, 10, 10]}
+              seed={200}
+              scale={2}
+              volume={50}
+              color="lightblue"
+              fade={1000}
+            />
+          </Clouds>
+        </Float>
+        {/* PLANET */}
+        <Billboard>
+          {/* <Planetzat rotation-y={degToRad(5)} scale={2.5} /> */}
+          <ModelSmoothPlanet rotation-z={degToRad(0)} scale={2.5} />
+          {/* <ModelSmooth rotation-y={degToRad(0)} scale={2.5} /> */}
+          {/* CHARACTERS */}
+          {/* <WithTie
+            position={[1, 9.5, 3]}
+            rotation-y={degToRad(-10)}
+            rotation-x={degToRad(30)}
+            rotation-z={degToRad(-5)}
+            castShadow
+            look
+            withoutTie
+          /> */}
+          <Allpose
+            position={[1, 9.5, 3]}
+            rotation-y={degToRad(-10)}
+            rotation-x={degToRad(30)}
+            rotation-z={degToRad(-5)}
+            castShadow
+            wave
+            tie
           />
-        </svg>
-      </button>
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
-        <color attach="background" args={["#333"]} />
 
-        {/* LIGHTS */}
-        <ambientLight intensity={3} />
-        <RandomizedLight
-          amount={8}
-          frames={100}
-          position={[0, 0, 0]}
-          castShadow
+          <Allpose
+            happy
+            position={[-3.5, 9, 3]}
+            rotation-z={degToRad(15)}
+            castShadow
+          />
+          <Allpose
+            happy
+            position={[5, 8.3, 3]}
+            rotation-x={degToRad(45)}
+            rotation-z={degToRad(-10)}
+            castShadow
+          />
+          <Allpose
+            position={[-4.3, 2.4, 8.4]}
+            rotation-y={degToRad(10)}
+            rotation-x={degToRad(10)}
+            castShadow
+            sit2
+          />
+
+          <Allpose
+            position={[-2, 2.65, 9.3]}
+            rotation-z={degToRad(10)}
+            rotation-x={degToRad(10)}
+            castShadow
+            tie
+          />
+          <Allpose
+            position={[0, 2.9, 9.2]}
+            rotation-y={degToRad(10)}
+            rotation-x={degToRad(10)}
+            castShadow
+            sit
+          />
+
+          <Allpose
+            position={[4, -5.6, 6]}
+            rotation-y={degToRad(30)}
+            castShadow
+            happy
+          />
+          <Allpose
+            position={[1, -5.2, 8]}
+            rotation-y={degToRad(10)}
+            castShadow
+            happy2
+            tie
+          />
+
+          {/* </PresentationControls> */}
+        </Billboard>
+        {/* <Environment preset="sunset" /> */}
+        <Stars
+          radius={50}
+          depth={50}
+          count={200}
+          factor={Math.floor(Math.random() * 10)}
+          saturation={0.5}
+          fade
+          speed={3}
         />
-        {/* <FollowCameraLight /> */}
-
-        {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
-        <Suspense fallback={<LoadingView />}>
-          {/* TEXTS */}
-          <Float rotationIntensity={5} floatIntensity={2}>
-            <group>
-              <TextCloud count={5} radius={20} texts={texts} />
-            </group>
-          </Float>
-          <Float>
-            {/* SPACE */}
-            <Clouds material={THREE.MeshBasicMaterial}>
-              <Cloud
-                bounds={[15, 15, 15]}
-                seed={20}
-                scale={1}
-                volume={10}
-                color="white"
-                fade={500}
-              />
-              <Cloud
-                bounds={[10, 10, 10]}
-                seed={200}
-                scale={2}
-                volume={50}
-                color="skyblue"
-                fade={1000}
-              />
-            </Clouds>
-          </Float>
-
-          {/* PLANET */}
-          <Billboard>
-            <Planetzat rotation-y={degToRad(5)} scale={2.5} />
-
-            {/* CHARACTERS */}
-            <WithTie
-              position={[1, 9.5, 3]}
-              rotation-y={degToRad(-10)}
-              rotation-x={degToRad(30)}
-              rotation-z={degToRad(-5)}
-              castShadow
-              look
-              withoutTie
-            />
-
-            {/* <Guy1 position={[4,-6,5.5]} rotation-y={degToRad(15)} castShadow/> */}
-            <WithTie
-              position={[-3, 9, 3]}
-              rotation-z={degToRad(6)}
-              castShadow
-              wave
-            />
-
-            <WithTie
-              position={[-6, 2.45, 6]}
-              rotation-z={degToRad(6)}
-              castShadow
-              idle
-            />
-
-            {/* <PresentationControls
- global
-        config={{ mass: 2, tension: 500, friction:26 }}
-        snap={{ mass: 2, tension: 1000 }}
-        rotation={[0, 0, 0]}
-        // polar={[-Math.PI / 3, Math.PI / 3]}
-        // azimuth={[-Math.PI / 1.4, Math.PI / 2]}
-        speed={1} // Speed factor
-        zoom={1} // Zoom factor when half the polar-max is reached
-        > */}
-
-            {/* <Guy
-              position={[1, 9.5, 3]}
-              rotation-y={degToRad(-10)}
-              rotation-x={degToRad(30)}
-              rotation-z={degToRad(-5)}
-              castShadow
-              onPointerOver={guyHover}
-              onPointerOut={guyOut}
-              hoveredThis={hoveredGuy}
-            /> */}
-
-            {/* <GuySit
-              position={[2, -5.8, 7.5]}
-              rotation-y={degToRad(15)}
-              castShadow
-              sit
-              onPointerOver={guyHover}
-              onPointerOut={guyOut}
-              hoveredThis={hoveredGuy}
-            /> */}
-            <WithTie
-              position={[2, -5.8, 7.5]}
-              rotation-y={degToRad(30)}
-              castShadow
-              sit
-            />
-            <WithTie
-              position={[1, 2.9, 9.2]}
-              rotation-y={degToRad(30)}
-              castShadow
-              sit
-              withoutTie
-            />
-
-            {/* </PresentationControls> */}
-          </Billboard>
-
-          {/* <Environment preset="park" /> */}
-          <Stars
-            radius={50}
-            depth={50}
-            count={200}
-            factor={Math.floor(Math.random() * 10)}
-            saturation={0.5}
-            fade
-            speed={3}
-          />
-        </Suspense>
-        {/* <axesHelper args={[50]} />
-      <gridHelper /> */}
-        {/* <TrackballControls /> */}
-        {/* <ContactShadows
-          position={[0, -0.8, 0]}
-          opacity={0.25}
-          scale={10}
-          blur={1.5}
-          far={0.8}
-        /> */}
-        <OrbitControls minDistance={20} maxDistance={70} />
-        {/* <Stats /> */}
-      </Canvas>
+      </Suspense>
     </>
   );
 }
