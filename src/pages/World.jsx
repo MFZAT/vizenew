@@ -229,18 +229,7 @@ export default function World({ texts }) {
     <>
       {/* CAMERA     */}
       {/* <CameraControls ref={controls} minDistance={20} maxDistance={70} /> */}
-      <OrbitControls
-        // minPolarAngle={Math.PI / 4}
-        // maxPolarAngle={Math.PI / 2}
-        // minAzimuthAngle={-Math.PI / 4}
-        // maxAzimuthAngle={Math.PI / 4}
-        autoRotate
-        autoRotateSpeed={0.5}
-        ref={controls}
-        minDistance={20}
-        maxDistance={70}
-        // enableDamping={false}
-      />
+
       {/* 
         <mesh
           ref={meshFitCameraHome}
@@ -267,7 +256,20 @@ export default function World({ texts }) {
         position={[0, 100, 100]}
       /> */}
       {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
+
       <Suspense fallback={<LoadingView />}>
+        <OrbitControls
+          // minPolarAngle={Math.PI / 4}
+          // maxPolarAngle={Math.PI / 2}
+          // minAzimuthAngle={-Math.PI / 4}
+          // maxAzimuthAngle={Math.PI / 4}
+          autoRotate
+          autoRotateSpeed={0.5}
+          ref={controls}
+          minDistance={20}
+          maxDistance={70}
+          // enableDamping={false}
+        />
         {/* TEXTS */}
         <Float rotationIntensity={2} floatIntensity={0}>
           <TextCloud count={5} radius={20} texts={texts} ref={textcloud} />
