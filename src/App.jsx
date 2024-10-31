@@ -48,7 +48,12 @@ export default function App() {
         </svg>
       </button>
 
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 30], fov: 100 }}>
+      <Canvas
+        shadows
+        shadowMap
+        dpr={[1, 2]}
+        camera={{ position: [0, 0, 30], fov: 100 }}
+      >
         <color attach="background" args={["#222"]} />
         <World texts={texts} />
       </Canvas>

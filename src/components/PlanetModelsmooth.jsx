@@ -24,19 +24,6 @@ export function ModelSmoothPlanet(props) {
   materials["Brown leaves.001"].map.repeat.set(2, 2);
   materials["Brown leaves.001"].map.rotation = degToRad(90);
 
-  material.color.set("#007934");
-  material.blendColor = "multiply";
-  material.map = useTexture("/textures/leavesbgr.png");
-  material.map.wrapS = THREE.MirroredRepeatWrapping;
-  material.map.wrapT = THREE.MirroredRepeatWrapping;
-  material.map.repeat.set(3, 3);
-  material.map.center.set(1, 2);
-  material.map.rotation = degToRad(45);
-  material.shininess = 50;
-  material.roughness = 0;
-  material.color.metalness = 1;
-
-  console.log("material", material);
   return (
     <group {...props} dispose={null}>
       <group name="Scene">
@@ -61,7 +48,6 @@ export function ModelSmoothPlanet(props) {
           material={materials["Brown leaves.001"]}
           receiveShadow
         >
-          {" "}
           <meshToonMaterial>
             <GradientTexture
               stops={[0, 0.7, 1]} // As many stops as you want

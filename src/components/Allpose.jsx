@@ -39,24 +39,28 @@ export function Allpose({ happy, wave, happy2, sit, sit2, tie, ...props }) {
             geometry={nodes.body001.geometry}
             material={materials["Material.030"]}
             skeleton={nodes.body001.skeleton}
+            castShadow
           />
           <skinnedMesh
             name="feet001"
             geometry={nodes.feet001.geometry}
             material={materials["Material.029"]}
             skeleton={nodes.feet001.skeleton}
+            castShadow
           />
           <skinnedMesh
             name="hands"
             geometry={nodes.hands.geometry}
             material={materials["Material.032"]}
             skeleton={nodes.hands.skeleton}
+            castShadow
           />
           <skinnedMesh
             name="head001"
             geometry={nodes.head001.geometry}
             material={materials["Material.031"]}
             skeleton={nodes.head001.skeleton}
+            castShadow
           />
           <skinnedMesh
             name="path14001"

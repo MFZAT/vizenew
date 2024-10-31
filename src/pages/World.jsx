@@ -6,22 +6,19 @@ import {
   CameraControls,
   Cloud,
   Clouds,
+  ContactShadows,
   Environment,
   Float,
   OrbitControls,
   RandomizedLight,
+  SpotLight,
   Stars,
   Text,
+  useHelper,
 } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils.js";
 import LoadingView from "../components/LoadingView";
-import FormPage from "../components/FormPage";
 import style from "../components/style.scss";
-import { AnimatePresence } from "framer-motion";
-import { Model2 } from "../components/PlanetModel2";
-import { WithTie } from "../components/Tie";
-import { Planetzat } from "../components/Planetzat";
-import { button, useControls } from "leva";
 import { ModelSmoothPlanet } from "../components/PlanetModelsmooth";
 
 import { Allpose } from "../components/Allpose";
@@ -125,6 +122,7 @@ function Word({ children, ...props }) {
         strokeColor={"#fff"}
         fillOpacity={0.5}
         color={"#fff"}
+        castShadow
         // opacity={opacity}
       >
         {children}
@@ -185,6 +183,7 @@ function FollowCameraLight() {
 export default function World({ texts }) {
   const controls = useRef();
   const textcloud = useRef();
+  const dirLight = useRef();
   const [hoveredGuy, setHoveredGuy] = useState(false);
 
   // useEffect(() => {
@@ -229,7 +228,6 @@ export default function World({ texts }) {
     <>
       {/* CAMERA     */}
       {/* <CameraControls ref={controls} minDistance={20} maxDistance={70} /> */}
-
       {/* 
         <mesh
           ref={meshFitCameraHome}
@@ -241,14 +239,15 @@ export default function World({ texts }) {
           <meshBasicMaterial color="orange" />
         </mesh> */}
       {/* LIGHTS */}
-      {/* <ambientLight intensity={3} color={new THREE.Color("white")} /> 
+      <ambientLight intensity={3} color={new THREE.Color("white")} />
       <RandomizedLight
         amount={8}
         frames={100}
         position={[0, 0, 0]}
         castShadow
-      /> */}
-      <FollowCameraLight />
+      />
+
+      {/* <FollowCameraLight /> */}
       {/* <hemisphereLight
         skycolor={new THREE.Color("lime")}
         groundColor={new THREE.Color("#efefef")}
@@ -256,7 +255,6 @@ export default function World({ texts }) {
         position={[0, 100, 100]}
       /> */}
       {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
-
       <Suspense fallback={<LoadingView />}>
         <OrbitControls
           // minPolarAngle={Math.PI / 4}
@@ -265,10 +263,10 @@ export default function World({ texts }) {
           // maxAzimuthAngle={Math.PI / 4}
           autoRotate
           autoRotateSpeed={0.5}
-          ref={controls}
           minDistance={20}
           maxDistance={70}
           // enableDamping={false}
+          // target={[0, 5, 10]}
         />
         {/* TEXTS */}
         <Float rotationIntensity={2} floatIntensity={0}>
@@ -300,15 +298,7 @@ export default function World({ texts }) {
           <ModelSmoothPlanet rotation-z={degToRad(0)} scale={2.5} />
 
           {/* CHARACTERS */}
-          {/* <WithTie
-            position={[1, 9.5, 3]}
-            rotation-y={degToRad(-10)}
-            rotation-x={degToRad(30)}
-            rotation-z={degToRad(-5)}
-            castShadow
-            look
-            withoutTie
-          /> */}
+
           <Allpose
             position={[1, 9.5, 3]}
             rotation-y={degToRad(-10)}
