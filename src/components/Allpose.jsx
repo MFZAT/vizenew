@@ -5,7 +5,7 @@ Command: npx gltfjsx@6.5.2 public/models/all.glb -o src/components/Allpose.jsx -
 
 import React, { useEffect } from "react";
 import { useGraph } from "@react-three/fiber";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations, Outlines } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 export function Allpose({ happy, wave, happy2, sit, sit2, tie, ...props }) {
@@ -40,6 +40,7 @@ export function Allpose({ happy, wave, happy2, sit, sit2, tie, ...props }) {
             material={materials["Material.030"]}
             skeleton={nodes.body001.skeleton}
             castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="feet001"
@@ -61,7 +62,10 @@ export function Allpose({ happy, wave, happy2, sit, sit2, tie, ...props }) {
             material={materials["Material.031"]}
             skeleton={nodes.head001.skeleton}
             castShadow
-          />
+            receiveShadow
+          >
+            <Outlines thickness={1} />
+          </skinnedMesh>
           <skinnedMesh
             name="path14001"
             geometry={nodes.path14001.geometry}
