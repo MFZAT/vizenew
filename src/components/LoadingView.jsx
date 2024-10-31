@@ -16,7 +16,67 @@ const LoadingView = () => {
       </div>
 
       <h1 className="text">
-        Společná cesta k r
+        Spole
+        <span className="letter-c">
+          c
+          <svg
+            id="LIST"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 182.98 148.92"
+            width="48"
+            height="48"
+            class="left"
+          >
+            <defs>
+              <style></style>
+              <linearGradient
+                id="Nepojmenovaný_přechod_51"
+                data-name="Nepojmenovaný přechod 51"
+                x1="18.82"
+                y1="80.96"
+                x2="166.38"
+                y2="80.96"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop offset="0" stop-color="#3f9c36" />
+                <stop offset="1" stop-color="#004d2a" />
+              </linearGradient>
+            </defs>
+            <path
+              style={{ fill: "url(#Nepojmenovaný_přechod_51)" }}
+              d="M18.82,102.15c5.42-50.15,34.47-82.2,147.57-57.52-46.87,27.73-61.02,119.03-144.7,63.69,24.72-25.17,40.16-35.74,72.86-51.03-25.63,5.84-51.02,19.31-75.73,44.86h0Z"
+            />
+          </svg>
+          <svg
+            id="LIST"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 182.98 148.92"
+            width="48"
+            height="48"
+            class="right"
+          >
+            <defs>
+              <style></style>
+              <linearGradient
+                id="Nepojmenovaný_přechod_51"
+                data-name="Nepojmenovaný přechod 51"
+                x1="18.82"
+                y1="80.96"
+                x2="166.38"
+                y2="80.96"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop offset="0" stop-color="#3f9c36" />
+                <stop offset="1" stop-color="#004d2a" />
+              </linearGradient>
+            </defs>
+            <path
+              style={{ fill: "url(#Nepojmenovaný_přechod_51)" }}
+              d="M18.82,102.15c5.42-50.15,34.47-82.2,147.57-57.52-46.87,27.73-61.02,119.03-144.7,63.69,24.72-25.17,40.16-35.74,72.86-51.03-25.63,5.84-51.02,19.31-75.73,44.86h0Z"
+            />
+          </svg>
+        </span>
+        ná cesta k r
         <span className="letter-u">
           <span className="dot"></span>u
         </span>

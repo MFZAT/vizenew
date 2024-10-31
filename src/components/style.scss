@@ -45,7 +45,7 @@ $particleRadius: 4vmin;
   -webkit-background-clip: text;
   animation: move-bg 3s infinite linear;
   font-size: 5rem;
-  margin-left: auto;
+  margin: auto;
   width: fit-content;
   position: relative;
 
@@ -62,9 +62,9 @@ $particleRadius: 4vmin;
     animation-iteration-count: infinite;
     animation-duration: $animationDuration;
 
-    $colors: (#007934, #007934, #3f9c35, #bed600);
+    $colors: (#007934, #007934, #007934, #3f9c35, #bed600);
 
-    @for $i from 1 through 4 {
+    @for $i from 1 through 5 {
       &:nth-child(#{$i}) {
         background: nth($colors, $i);
         animation-delay: ($i / 4) * $animationDuration * -1;
@@ -76,6 +76,30 @@ $particleRadius: 4vmin;
 .letter-u {
   position: relative;
   color: #3f9c35;
+}
+
+.letter-c {
+  position: relative;
+  color: #007934;
+
+  .left {
+    position: absolute;
+    top: -0.2rem;
+    left: 1rem;
+    // animation-name: leaf;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-delay: 1;
+    animation-duration: 3s;
+  }
+
+  .right {
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    transform: rotateY(180deg) translateX(32px);
+  }
 }
 
 .dot {
@@ -95,7 +119,6 @@ $particleRadius: 4vmin;
   border: 1px solid #010101;
   backface-visibility: hidden;
   position: absolute;
-  animation-name: move;
 }
 
 @keyframes move {
@@ -108,6 +131,25 @@ $particleRadius: 4vmin;
   100% {
     z-index: 10;
     transform: scale(0) rotate(360deg) translate3d(0, 0, 1px);
+  }
+}
+
+@keyframes leaf {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100px);
+  }
+  33% {
+    opacity: 1;
+    -webkit-transform: translateX(0px);
+  }
+  66% {
+    opacity: 1;
+    -webkit-transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateX(100px);
   }
 }
 
