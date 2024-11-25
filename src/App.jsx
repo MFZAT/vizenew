@@ -76,9 +76,9 @@ export default function App() {
 
           <Routes>
             <Route path="/" element={<World texts={texts} />} />
-            <Route path="panel1" element={<Panel1 texts={[]} />} />
-            <Route path="panel2" element={<Panel2 texts={[]} />} />
-            <Route path="panel3" element={<Panel3 texts={[]} />} />
+            <Route path="/panel1" element={<Panel1 texts={[]} />} />
+            <Route path="/panel2" element={<Panel2 texts={[]} />} />
+            <Route path="/panel3" element={<Panel3 texts={[]} />} />
           </Routes>
         </Canvas>
       </Router>
