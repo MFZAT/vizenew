@@ -1,20 +1,14 @@
 import * as THREE from "three";
 import { useRef, useState, useMemo, useEffect, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Billboard,
-  CameraControls,
   Cloud,
   Clouds,
-  ContactShadows,
-  Environment,
   Float,
   OrbitControls,
   RandomizedLight,
-  SpotLight,
   Stars,
   Text,
-  useHelper,
 } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils.js";
 import LoadingView from "../components/LoadingView";
@@ -24,44 +18,45 @@ import { ModelSmoothPlanet } from "../components/PlanetModelsmooth";
 import { Allpose } from "../components/Allpose";
 
 const wordData = [
-  "Vysokorychlostní tratě (VRT)",
-  "AI",
-  "Vodík",
-  "Technologie",
-  " Diverzita a akceptace ",
-
-  "My Zaťáci  ",
-  "Sebevědomí",
-  "Důvěra",
-  "Podpora",
-  "Cíle",
-  "Hodnoty",
-  "Dynamičnost",
-  "Inovace",
-  "Výzvy",
-  "Budoucnost",
-  "Růst",
-  "Trendy💡",
-  "Výsledek ",
-
-  "Digitalizace",
-  "Malé modulární reaktory / SMR",
-  "Decentralizace ",
-  "Nové energetické zdroje",
-  "Nové transfery energie",
-  "Sdílená energetika",
-  "Pracoviště jako místo setkávání",
+  "leadership",
+  "kompetence",
+  "inovace",
+  "spolupráce",
+  "respekt",
+  "společná strategie",
+  "tolerance",
+  "vzdělávání",
+  "motivace",
+  "chuť věci měnit",
+  "rozvoj",
+  "seberozvoj",
+  "kreativita",
+  "spolutvorba",
+  "podpora",
+  "vize",
+  "společenská dohoda",
+  "zodpovědnost",
+  "změna",
+  "otevřenost",
+  "flexibilita",
+  "týmová práce",
+  "osobní růst",
+  "přidaná hodnota",
+  "diverzita",
+  "důvěra",
+  "iniciativa",
+  "zapojení",
+  "profesionalita",
+  "empatie",
+  "rovnováha",
+  "sdílené hodnoty",
+  "dlouhodobé cíle",
+  "trendy",
+  "spolutvorba",
+  "podpora",
 ];
 
 function Word({ children, ...props }) {
-  // const { stroke } = useControls({
-  //   stroke: "#fff",
-  // });
-  // const fillOpacity = useControls("Text fill", {
-  //   opacity: 0.5,
-  //   fill: "white",
-  // });
-
   const fontProps = {
     font: "/fonts/IndieFlower-Regular.ttf",
     // fontSize: Math.random() * 5,
@@ -71,7 +66,7 @@ function Word({ children, ...props }) {
     // fillOpacity: 0,
     strokeWidth: "3%",
     strokeColor: "#ffffff",
-    maxWidth: 14,
+    maxWidth: 18,
     overflowWrap: "break-word",
     textAlign: "center",
     "material-toneMapped": true,
@@ -89,24 +84,7 @@ function Word({ children, ...props }) {
     if (hovered) document.body.style.cursor = "pointer";
     return () => (document.body.style.cursor = "auto");
   }, [hovered]);
-  // Tie component to the render-loop
-  useFrame(({ camera }) => {
-    // ref.current.material.color.lerp(
-    //   color.set(hovered ? "green" : "white"),
-    //   0.1
-    // );
-    // if (hovered) {
-    //   ref.current.fillOpacity = 1;
-    //   ref.current.color = "red";
-    // } else {
-    //   ref.current.fillOpacity = 0;
-    //   ref.current.color = fillOpacity.color;
-    // }
-    // ref.current.fontProps.strokeColor.lerp(
-    //   strokeColor.set(hovered ? "green" : "white"),
-    //   0.1
-    // );
-  });
+
   return (
     <Billboard {...props}>
       <Text
@@ -123,7 +101,6 @@ function Word({ children, ...props }) {
         fillOpacity={0.5}
         color={"#fff"}
         castShadow
-        // opacity={opacity}
       >
         {children}
       </Text>
@@ -131,9 +108,8 @@ function Word({ children, ...props }) {
   );
 }
 
-function TextCloud({ count, radius = 20, texts }) {
+function TextCloud({ count = 10, radius = 30, texts }) {
   // Create a count x count random words with spherical distribution
-
   const words = useMemo(() => {
     const temp = [];
     const spherical = new THREE.Spherical();
@@ -150,106 +126,25 @@ function TextCloud({ count, radius = 20, texts }) {
 
     return temp;
   }, [count, radius]);
-  console.log(words, words.length, wordData.length, texts.length, count);
+  console.log(words, words.length, wordData.length);
 
   return words.map(([pos, word], index) => (
     <Float rotationIntensity={0} floatIntensity={3} floatingRange={[-0.3, 0.3]}>
       <Word key={word} position={pos} children={word}>
-        {texts.length > 1 ? texts[index] : wordData[index]}
+        {wordData[index]}
       </Word>
     </Float>
   ));
 }
 
-function FollowCameraLight() {
-  const lightRef = useRef();
-  const { camera } = useThree();
-
-  useFrame(() => {
-    lightRef.current.position.copy(camera.position);
-  });
-
-  return (
-    <>
-      {/* <directionalLight ref={lightRef} position={[0, 10, -20]} intensity={5} /> */}
-      {/* <directionalLight intensity={5} /> */}
-
-      {/* <RandomizedLight amount={8} frames={100} position={[0, 0, 0]} /> */}
-      <ambientLight intensity={3} ref={lightRef} />
-      <directionalLight ref={lightRef} intensity={3} />
-    </>
-  );
-}
-
-export default function World({ texts, count }) {
+export default function Panel3({ texts }) {
   const controls = useRef();
   const textcloud = useRef();
   const dirLight = useRef();
   const [hoveredGuy, setHoveredGuy] = useState(false);
 
-  // const intro = async () => {
-  //   controls.current.dolly(-50);
-  //   controls.current.smoothTime = 3;
-  //   controls.current.dolly(55, true);
-  //   controls.current.rotate(2, 0, true);
-  // };
-
-  // useEffect(() => {
-  //   controls.current.dolly(-50);
-  //   setTimeout(() => {
-  //     intro();
-  //   }, "10000");
-
-  //   console.log("controls", controls);
-  // });
-
-  useFrame(() => {
-    // controls.current.smoothTime = 0.0001;
-    // controls.current.rotate(-0.01, 0, true);
-    // textcloud.current.rotation.y += 0.01;
-  });
-
-  // useControls("Dolly", {
-  //   in: button(() => controls.current.dolly(3, true)),
-  //   out: button(() => controls.current.dolly(-3, true)),
-  // });
-
-  // useControls("truck", {
-  //   up: button(() => controls.current.truck(0, -0.5, true)),
-  //   down: button(() => controls.current.truck(0, 0.5, true)),
-  //   left: button(() => controls.current.truck(-0.5, 0, true)),
-  // });
-
-  const guyHover = (e) => {
-    e.stopPropagation();
-    setHoveredGuy(true);
-    // console.log("Guy");
-  };
-  const guyOut = () => setHoveredGuy(false);
-  // const directionalCtl = useControls("Directional Light", {
-  //   visible: true,
-  //   position: {
-  //     x: 3.3,
-  //     y: 1.0,
-  //     z: 4.4,
-  //   },
-  //   castShadow: true,
-  // });
-
   return (
     <>
-      {/* CAMERA     */}
-      {/* <CameraControls ref={controls} minDistance={20} maxDistance={70} /> */}
-      {/* 
-        <mesh
-          ref={meshFitCameraHome}
-          position-z={1.5}
-          position-x={1}
-          visible={false}
-        >
-          <boxGeometry args={[10, 10, 10]} />
-          <meshBasicMaterial color="orange" />
-        </mesh> */}
       {/* LIGHTS */}
       <ambientLight intensity={3} color={new THREE.Color("white")} />
       <RandomizedLight
@@ -259,14 +154,6 @@ export default function World({ texts, count }) {
         castShadow
       />
 
-      {/* <FollowCameraLight /> */}
-      {/* <hemisphereLight
-        skycolor={new THREE.Color("lime")}
-        groundColor={new THREE.Color("#efefef")}
-        intensity={2}
-        position={[0, 100, 100]}
-      /> */}
-      {/* <fog attach="fog" args={["#202025", 0, 80]} /> */}
       <Suspense fallback={<LoadingView />}>
         <OrbitControls
           // minPolarAngle={Math.PI / 4}
@@ -282,22 +169,17 @@ export default function World({ texts, count }) {
         />
         {/* TEXTS */}
         <Float rotationIntensity={2} floatIntensity={0}>
-          <TextCloud
-            count={texts.length > 26 ? 6 : 5}
-            radius={20}
-            texts={texts}
-            ref={textcloud}
-          />
+          <TextCloud count={6} radius={20} texts={texts} ref={textcloud} />
         </Float>
         <Float rotationIntensity={2} floatIntensity={5} floatingRange={[1, -1]}>
           {/* SPACE */}
           <Clouds material={THREE.MeshBasicMaterial}>
             <Cloud
               bounds={[15, 15, 15]}
-              seed={20}
+              seed={10}
               scale={1}
-              volume={10}
-              color="white"
+              volume={30}
+              color="snow"
               fade={500}
             />
             <Cloud
@@ -305,7 +187,7 @@ export default function World({ texts, count }) {
               seed={200}
               scale={2}
               volume={50}
-              color="lightblue"
+              color="snow"
               fade={1000}
             />
           </Clouds>

@@ -25,7 +25,7 @@ const LoadingView = () => {
             viewBox="0 0 182.98 148.92"
             width="48"
             height="48"
-            class="left"
+            className="left"
           >
             <defs>
               <style></style>
@@ -38,8 +38,8 @@ const LoadingView = () => {
                 y2="80.96"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="0" stop-color="#3f9c36" />
-                <stop offset="1" stop-color="#004d2a" />
+                <stop offset="0" stopColor="#3f9c36" />
+                <stop offset="1" stopColor="#004d2a" />
               </linearGradient>
             </defs>
             <path
@@ -53,7 +53,7 @@ const LoadingView = () => {
             viewBox="0 0 182.98 148.92"
             width="48"
             height="48"
-            class="right"
+            className="right"
           >
             <defs>
               <style></style>
@@ -66,8 +66,8 @@ const LoadingView = () => {
                 y2="80.96"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="0" stop-color="#3f9c36" />
-                <stop offset="1" stop-color="#004d2a" />
+                <stop offset="0" stopColor="#3f9c36" />
+                <stop offset="1" stopColor="#004d2a" />
               </linearGradient>
             </defs>
             <path
